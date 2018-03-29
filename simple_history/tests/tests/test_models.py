@@ -22,7 +22,7 @@ from ..models import (AbstractBase, AdminProfile, Book, Bookcase, Choice, City,
                       Library, MultiOneToOne, Person, Poll, PollInfo,
                       PollWithExcludeFields, Province, Restaurant, SelfFK,
                       Series, SeriesWork, State, Temperature,
-                      UnicodeVerboseName, WaterLevel)
+                      UnicodeVerboseName, WaterLevel, ConcreteExternal)
 
 try:
     from django.apps import apps
@@ -422,6 +422,13 @@ class AppLabelTest(TestCase):
                          ExternalModel4)
         self.assertEqual(get_model('tests', 'HistoricalExternalModel4'),
                          ExternalModel4.histories.model)
+
+        # Test that historical model is defined within app of concrete
+        # model rather than abstract base model
+        self.assertEqual(get_model('tests', 'ConcreteExternal'),
+                         ConcreteExternal)
+        self.assertEqual(get_model('tests', 'HistoricalConcreteExternal'),
+                         ConcreteExternal.history.model)
 
 
 class HistoryManagerTest(TestCase):
